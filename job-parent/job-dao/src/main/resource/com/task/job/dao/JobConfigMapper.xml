@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.task.job.dao.JobConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.task.job.dao.JobConfig" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="JOB_NAME" property="jobName" jdbcType="VARCHAR" />
+    <result column="JOB_GROUP" property="jobGroup" jdbcType="VARCHAR" />
+    <result column="JOB_DESC" property="jobDesc" jdbcType="VARCHAR" />
+    <result column="CRON" property="cron" jdbcType="VARCHAR" />
+    <result column="EXCLUDE_CRON" property="excludeCron" jdbcType="VARCHAR" />
+    <result column="JOB_TYPE" property="jobType" jdbcType="VARCHAR" />
+    <result column="JOB_INVOKE_ID" property="jobInvokeId" jdbcType="INTEGER" />
+    <result column="IS_VALID" property="isValid" jdbcType="CHAR" />
+    <result column="LAST_RUN_ID" property="lastRunId" jdbcType="INTEGER" />
+    <result column="LAST_RUN_STATUS" property="lastRunStatus" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="MAX_SPEND_SECS" property="maxSpendSecs" jdbcType="INTEGER" />
+    <result column="CONTACTS_EMAIL" property="contactsEmail" jdbcType="VARCHAR" />
+    <result column="CREATED_AT" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_AT" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, JOB_NAME, JOB_GROUP, JOB_DESC, CRON, EXCLUDE_CRON, JOB_TYPE, JOB_INVOKE_ID, IS_VALID, 
+    LAST_RUN_ID, LAST_RUN_STATUS, REMARK, MAX_SPEND_SECS, CONTACTS_EMAIL, CREATED_AT, 
+    CREATED_BY, UPDATED_AT, UPDATED_BY
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from KERNEL_JOB_CONFIG
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from KERNEL_JOB_CONFIG
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.task.job.dao.JobConfig" useGeneratedKeys="true" keyProperty="id" >
+    insert into KERNEL_JOB_CONFIG (JOB_NAME, JOB_GROUP, JOB_DESC, 
+      CRON, EXCLUDE_CRON, JOB_TYPE, 
+      JOB_INVOKE_ID, IS_VALID, LAST_RUN_ID, 
+      LAST_RUN_STATUS, REMARK, MAX_SPEND_SECS, 
+      CONTACTS_EMAIL, CREATED_AT, CREATED_BY, 
+      UPDATED_AT, UPDATED_BY)
+    values (#{jobName,jdbcType=VARCHAR}, #{jobGroup,jdbcType=VARCHAR}, #{jobDesc,jdbcType=VARCHAR}, 
+      #{cron,jdbcType=VARCHAR}, #{excludeCron,jdbcType=VARCHAR}, #{jobType,jdbcType=VARCHAR}, 
+      #{jobInvokeId,jdbcType=INTEGER}, #{isValid,jdbcType=CHAR}, #{lastRunId,jdbcType=INTEGER}, 
+      #{lastRunStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{maxSpendSecs,jdbcType=INTEGER}, 
+      #{contactsEmail,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.task.job.dao.JobConfig" useGeneratedKeys="true" keyProperty="id" >
+    insert into KERNEL_JOB_CONFIG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobName != null" >
+        JOB_NAME,
+      </if>
+      <if test="jobGroup != null" >
+        JOB_GROUP,
+      </if>
+      <if test="jobDesc != null" >
+        JOB_DESC,
+      </if>
+      <if test="cron != null" >
+        CRON,
+      </if>
+      <if test="excludeCron != null" >
+        EXCLUDE_CRON,
+      </if>
+      <if test="jobType != null" >
+        JOB_TYPE,
+      </if>
+      <if test="jobInvokeId != null" >
+        JOB_INVOKE_ID,
+      </if>
+      <if test="isValid != null" >
+        IS_VALID,
+      </if>
+      <if test="lastRunId != null" >
+        LAST_RUN_ID,
+      </if>
+      <if test="lastRunStatus != null" >
+        LAST_RUN_STATUS,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="maxSpendSecs != null" >
+        MAX_SPEND_SECS,
+      </if>
+      <if test="contactsEmail != null" >
+        CONTACTS_EMAIL,
+      </if>
+      <if test="createdAt != null" >
+        CREATED_AT,
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY,
+      </if>
+      <if test="updatedAt != null" >
+        UPDATED_AT,
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jobName != null" >
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="jobDesc != null" >
+        #{jobDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null" >
+        #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="excludeCron != null" >
+        #{excludeCron,jdbcType=VARCHAR},
+      </if>
+      <if test="jobType != null" >
+        #{jobType,jdbcType=VARCHAR},
+      </if>
+      <if test="jobInvokeId != null" >
+        #{jobInvokeId,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=CHAR},
+      </if>
+      <if test="lastRunId != null" >
+        #{lastRunId,jdbcType=INTEGER},
+      </if>
+      <if test="lastRunStatus != null" >
+        #{lastRunStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="maxSpendSecs != null" >
+        #{maxSpendSecs,jdbcType=INTEGER},
+      </if>
+      <if test="contactsEmail != null" >
+        #{contactsEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.task.job.dao.JobConfig" >
+    update KERNEL_JOB_CONFIG
+    <set >
+      <if test="jobName != null" >
+        JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        JOB_GROUP = #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="jobDesc != null" >
+        JOB_DESC = #{jobDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null" >
+        CRON = #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="excludeCron != null" >
+        EXCLUDE_CRON = #{excludeCron,jdbcType=VARCHAR},
+      </if>
+      <if test="jobType != null" >
+        JOB_TYPE = #{jobType,jdbcType=VARCHAR},
+      </if>
+      <if test="jobInvokeId != null" >
+        JOB_INVOKE_ID = #{jobInvokeId,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        IS_VALID = #{isValid,jdbcType=CHAR},
+      </if>
+      <if test="lastRunId != null" >
+        LAST_RUN_ID = #{lastRunId,jdbcType=INTEGER},
+      </if>
+      <if test="lastRunStatus != null" >
+        LAST_RUN_STATUS = #{lastRunStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="maxSpendSecs != null" >
+        MAX_SPEND_SECS = #{maxSpendSecs,jdbcType=INTEGER},
+      </if>
+      <if test="contactsEmail != null" >
+        CONTACTS_EMAIL = #{contactsEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        CREATED_AT = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        UPDATED_AT = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.task.job.dao.JobConfig" >
+    update KERNEL_JOB_CONFIG
+    set JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      JOB_GROUP = #{jobGroup,jdbcType=VARCHAR},
+      JOB_DESC = #{jobDesc,jdbcType=VARCHAR},
+      CRON = #{cron,jdbcType=VARCHAR},
+      EXCLUDE_CRON = #{excludeCron,jdbcType=VARCHAR},
+      JOB_TYPE = #{jobType,jdbcType=VARCHAR},
+      JOB_INVOKE_ID = #{jobInvokeId,jdbcType=INTEGER},
+      IS_VALID = #{isValid,jdbcType=CHAR},
+      LAST_RUN_ID = #{lastRunId,jdbcType=INTEGER},
+      LAST_RUN_STATUS = #{lastRunStatus,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      MAX_SPEND_SECS = #{maxSpendSecs,jdbcType=INTEGER},
+      CONTACTS_EMAIL = #{contactsEmail,jdbcType=VARCHAR},
+      CREATED_AT = #{createdAt,jdbcType=TIMESTAMP},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      UPDATED_AT = #{updatedAt,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectBySelective" parameterType="com.shhxzq.kernel.schedule.model.JobConfig" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kernel_job_config
+    <where>
+      <if test="jobName != null">
+        and job_name = #{jobName,jdbcType=VARCHAR}
+      </if>
+      <if test="jobGroup != null">
+        and job_group = #{jobGroup,jdbcType=VARCHAR}
+      </if>
+      <if test="jobType != null">
+        and job_type = #{jobType,jdbcType=VARCHAR}
+      </if>
+      <if test="jobInvokeId != null">
+        and job_invoke_id = #{jobInvokeId,jdbcType=INTEGER}
+      </if>
+      <if test="isValid != null" >
+        and is_valid = #{isValid,jdbcType=VARCHAR}
+      </if>
+      <if test="lastRunId != null" >
+        and last_run_id = #{lastRunId,jdbcType=VARCHAR}
+      </if>
+      <if test="lastRunStatus != null" >
+        and last_run_status = #{lastRunStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="contactsEmail != null" >
+        and contacts_email = #{contactsEmail,jdbcType=VARCHAR}
+      </if>
+      <if test="createdBy != null" >
+        and created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null" >
+        and updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  
+</mapper>

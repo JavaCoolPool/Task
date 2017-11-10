@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<import resource="classpath*:spring/spring-schedule-mybatis.xml" />
+
+	<!--job details -->
+	<bean id="loadConfigJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.task.job.job.LoadConfigJob</value>
+		</property>
+		<property name="name" value="loadConfigJob"/>
+		<property name="durability" value="true"/>
+		<property name="requestsRecovery" value="true"/>
+	</bean>
+	<!--triggers -->
+	<bean id="loadConfigTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="loadConfigJob"/>
+		<property name="name" value="loadConfigTrigger"/>
+		<property name="cronExpression" value="0/30 * * * * ?"/>
+	</bean>
+
+
+	<!-- scheduler -->
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method="destroy">
+		<property name="waitForJobsToCompleteOnShutdown" value="true"/>
+		<property name="triggers">
+			<list>
+				<ref bean="loadConfigTrigger"/>
+			</list>
+		</property>
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+		<property name="quartzProperties">
+			<props>
+				<!-- ThreadPool -->
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<prop key="org.quartz.threadPool.threadCount">35</prop>
+				<prop key="org.quartz.threadPool.threadPriority">5</prop>
+				<!-- Job store -->
+				<prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+				<prop key="org.quartz.scheduler.instanceName">JobCluster</prop>
+				<prop key="org.quartz.jobStore.misfireThreshold">60000</prop>
+				<prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+				<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>
+				<prop key="org.quartz.jobStore.isClustered">true</prop>
+				<prop key="org.quartz.jobStore.useProperties">false</prop>
+				<prop key="org.quartz.jobStore.tablePrefix">${kernel.schedule.cluster.table.prefix}</prop>
+				<prop key="org.quartz.jobStore.clusterCheckinInterval">2000</prop>
+			</props>
+		</property>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+</beans>

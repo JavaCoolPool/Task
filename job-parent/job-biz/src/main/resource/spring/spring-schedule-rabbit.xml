@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/task
+      http://www.springframework.org/schema/task/spring-task-3.0.xsd
+      http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/rabbit
+      http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<rabbit:connection-factory id="connectionFactory"
+		host="${kernel.schedule.rabbit.host}" port="${kernel.schedule.rabbit.port}" username="${kernel.schedule.rabbit.username}"
+		password="${kernel.schedule.rabbit.password}" />
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
+		exchange="kernel_schedule_exchange" />
+
+	<!-- 接收BIZ消息 -->
+	<rabbit:queue id="biz_queue_kernel_schedule" durable="true"
+		auto-delete="false" exclusive="false" name="biz_queue_kernel_schedule" />
+
+
+	<rabbit:direct-exchange name="kernel_schedule_exchange" id="kernel_schedule_exchange" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="biz_queue_kernel_schedule" key="biz_queue_kernel_schedule_key"/>
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- queue listener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 task-executor="taskExecutor" -->
+	<rabbit:listener-container
+		connection-factory="connectionFactory" acknowledge="auto">
+		<!-- 接收BIZ消息 -->
+		<rabbit:listener  queues="biz_queue_kernel_schedule" ref="jobCallbackListener" />
+	</rabbit:listener-container>
+	<bean id="jobCallbackListener" class="com.task.job.listener.JobCallbackListener"/>
+</beans>
